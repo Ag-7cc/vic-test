@@ -51,5 +51,4 @@ work/
 .gitignore
 logs/
 out/
-pom.xml
-src/
+/src/main/java/com/vic/test/util/ConnectionUtil.java
