@@ -39,7 +39,7 @@ public class Rush {
 
     public void submit() {
         try {
-            String url = "http://www.gegegancn.com/pay/znsub.php";
+            String url = "";
             CloseableHttpClient httpClient = HttpClients.createDefault();
             HttpPost httpPost = new HttpPost(url);
             // header
