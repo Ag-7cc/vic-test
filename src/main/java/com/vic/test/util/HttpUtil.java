@@ -32,7 +32,7 @@ import java.util.Map;
  * Created by vic
  * Create time : 2017/7/12 下午6:36
  */
-public class HttpUtls {
+public class HttpUtil {
     /**
      * 绕过验证
      *
