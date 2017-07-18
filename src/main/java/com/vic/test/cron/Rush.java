@@ -10,7 +10,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -27,7 +26,8 @@ import java.util.Random;
 @EnableScheduling
 @Slf4j
 public class Rush {
-    @Scheduled(fixedRate = 1000)
+
+//    @Scheduled(fixedRate = 1000)
     public void rushDB() {
         submit();
     }

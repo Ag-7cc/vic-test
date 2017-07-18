@@ -1,0 +1,16 @@
+server:
+  display-name: Vic Test
+  port: 8081
+  compression:
+    enabled: true
+    mime-types: text/html,text/css,application/javascript,application/json,application/font-sfnt,application/font-woff,application/font-woff2
+
+spring:
+  application:
+    name: Vic-Test
+  http:
+    encoding:
+      charset: utf-8
+      enabled: true
+  pid:
+    file: ${spring.application.name}.pid
