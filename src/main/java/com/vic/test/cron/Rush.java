@@ -1,6 +1,6 @@
 package com.vic.test.cron;
 
-import lombok.extern.slf4j.Slf4j;
+import lombok.extern.log4j.Log4j;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -24,7 +24,7 @@ import java.util.Random;
  */
 @Component
 @EnableScheduling
-@Slf4j
+@Log4j
 public class Rush {
 
 //    @Scheduled(fixedRate = 1000)
@@ -62,8 +62,9 @@ public class Rush {
 
             String result = EntityUtils.toString(response.getEntity(), "utf-8");
 
-            String log = result + "cardNo=" + cardNo + " password=" + password + " email=" + email + " vipLevel=" + vipLevel;
-            System.out.println(log);
+            String message = result + "cardNo=" + cardNo + " password=" + password + " email=" + email + " vipLevel=" + vipLevel;
+
+            log.info(message);
         } catch (IOException e) {
             e.printStackTrace();
         }
