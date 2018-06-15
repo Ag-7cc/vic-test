@@ -33,7 +33,7 @@ public class StorageStockCostUpdater {
         Connection connection = ConnectionUtil.getConnection(ConnectionUtil.TRR_PRD);
 
         List<StorageCost> excelCosts = loadExcel("/data/tmp/单位成本表6.15.xlsx");
-        System.out.println("更新数量》》" + excelCosts.size());
+        System.out.println("总数》》" + excelCosts.size());
         Map<Integer, StorageCost> excelCostMap = excelCosts.stream().collect(Collectors.toMap(StorageCost::getId, Function.identity()));
 
         Set<Integer> collect = excelCosts.stream().map(StorageCost::getId).collect(Collectors.toSet());
@@ -62,6 +62,9 @@ public class StorageStockCostUpdater {
     }
 
     public static void instAlterCostLog(List<StorageCost> diffCost) {
+        if (CollectionUtils.isEmpty(diffCost)) {
+            return;
+        }
         String insertSql = "INSERT INTO `SHOP_Log_AlterCost` (`CityID`,`ProductID`,`Cost`,`NewCost`) VALUES ";
         System.out.println(insertSql);
         AtomicInteger index = new AtomicInteger(0);
