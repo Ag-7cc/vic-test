@@ -8,6 +8,8 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
+import java.util.Objects;
+import java.util.Scanner;
 import java.util.Set;
 
 /**
@@ -17,7 +19,7 @@ import java.util.Set;
 public class Server {
     private ByteBuffer sendBuffer = ByteBuffer.allocate(1024);
     private ByteBuffer readBuffer = ByteBuffer.allocate(1024);
-    private String str;
+    Scanner scanner = new Scanner(System.in);
 
     public static void main(String[] args) {
         new Server().start();
@@ -43,34 +45,38 @@ public class Server {
                 Iterator<SelectionKey> keyIterator = keys.iterator();
                 while (keyIterator.hasNext()) {
                     SelectionKey key = keyIterator.next();
+                    keyIterator.remove();
                     if (!key.isValid()) {
                         continue;
                     }
                     if (key.isAcceptable()) {
                         accept(selector, key);
-                    } else if (key.isReadable()) {
-                        read(selector, key);
-                    } else if (key.isWritable()) {
-                        write(selector, key);
                     }
-                    keyIterator.remove();
+                    if (key.isReadable()) {
+                        read(selector, key);
+                    }
+                    if (key.isWritable()) {
+                        System.out.print("please input message:");
+                        String message = scanner.nextLine();
+                        write(selector, key, message);
+                    }
                 }
-
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private void write(Selector selector, SelectionKey key) throws IOException {
+    private void write(Selector selector, SelectionKey key, String message) throws IOException {
         SocketChannel channel = (SocketChannel) key.channel();
-        System.out.println("write:" + str);
-
-        sendBuffer.clear();
-        sendBuffer.put(str.getBytes());
-        sendBuffer.flip();
-        channel.write(sendBuffer);
         channel.register(selector, SelectionKey.OP_READ);
+        if (Objects.nonNull(message)) {
+            System.out.println("write:" + message);
+            sendBuffer.clear();
+            sendBuffer.put(message.getBytes());
+            sendBuffer.flip();
+            channel.write(sendBuffer);
+        }
     }
 
     private void read(Selector selector, SelectionKey key) throws IOException {
@@ -84,17 +90,16 @@ public class Server {
             channel.close();
             return;
         }
-
-        str = new String(readBuffer.array(), 0, numRead);
-        System.out.println(str);
-        channel.register(selector, SelectionKey.OP_WRITE);
+        String message = new String(readBuffer.array(), 0, numRead);
+        System.out.println("receive message:" + message);
+        channel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
     }
 
     public void accept(Selector selector, SelectionKey key) throws IOException {
         ServerSocketChannel ssc = (ServerSocketChannel) key.channel();
         SocketChannel clientChannel = ssc.accept();
         clientChannel.configureBlocking(false);
-        clientChannel.register(selector, SelectionKey.OP_READ);
+        clientChannel.register(selector, SelectionKey.OP_READ | SelectionKey.OP_WRITE);
         System.out.println("a new client connected " + clientChannel.getRemoteAddress());
     }
 }

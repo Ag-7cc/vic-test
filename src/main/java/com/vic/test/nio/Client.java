@@ -34,7 +34,6 @@ public class Client {
         while (true) {
             selector.select();
             Set<SelectionKey> keys = selector.selectedKeys();
-            System.out.println("keys=" + keys.size());
             Iterator<SelectionKey> iterator = keys.iterator();
             while (iterator.hasNext()) {
                 SelectionKey key = iterator.next();
@@ -45,26 +44,23 @@ public class Client {
                     sc.register(selector, SelectionKey.OP_WRITE);
                     System.out.println("server connected...");
                     break;
-                } else if (key.isWritable()) {
-                    System.out.println("please input message:");
+                }
+                if (key.isWritable()) {
+                    System.out.print("please input message:");
                     String message = scanner.nextLine();
 
                     writeBuffer.clear();
                     writeBuffer.put(message.getBytes());
-
                     writeBuffer.flip();
                     sc.write(writeBuffer);
-
                     sc.register(selector, SelectionKey.OP_READ);
-                    sc.register(selector, SelectionKey.OP_WRITE);
-                    sc.register(selector, SelectionKey.OP_READ);
-                } else if (key.isReadable()) {
-                    System.out.println("receive message:");
+                }
+                if (key.isReadable()) {
                     SocketChannel client = (SocketChannel) key.channel();
                     readBuffer.clear();
                     int num = client.read(readBuffer);
-                    System.out.println(new String(readBuffer.array(), 0, num));
-                    sc.register(selector, SelectionKey.OP_WRITE);
+                    System.out.println("receive message:" + new String(readBuffer.array(), 0, num));
+                    sc.register(selector, SelectionKey.OP_READ, SelectionKey.OP_WRITE);
                 }
             }
         }
