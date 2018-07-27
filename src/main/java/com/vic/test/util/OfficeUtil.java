@@ -182,7 +182,6 @@ public class OfficeUtil {
     }
 
     private static Sheet getSheet(Workbook book, Integer index, String name) {
-        System.out.println(index + "  " + name);
         if (index != null && name != null) {
             throw new RuntimeException("index,name只能有一个不为空！");
         }
