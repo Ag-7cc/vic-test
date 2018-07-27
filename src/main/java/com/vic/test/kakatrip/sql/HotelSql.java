@@ -1,6 +1,8 @@
 package com.vic.test.kakatrip.sql;
 
 
+import com.vic.test.util.ConnectionUtil;
+
 import java.sql.*;
 
 /**
@@ -11,9 +13,7 @@ public class HotelSql {
 
     public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
-        Class.forName("com.mysql.jdbc.Driver");
-        String url = "jdbc:mysql://10.99.99.137:3306/kakatrip?user=admin&password=yHrW4FFaOMGj&useUnicode=true&characterEncoding=UTF8";
-        Connection connection = DriverManager.getConnection(url);
+        Connection connection = ConnectionUtil.getConnection(ConnectionUtil.KAKATRIP);
 
         String sql = "select * from Account where userId = ?";
         PreparedStatement preparedStatement = connection.prepareStatement(sql);
