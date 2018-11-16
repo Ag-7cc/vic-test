@@ -50,4 +50,19 @@ public class AppTest
 
 
     }
+
+    public void testIntern() {
+        String s1 = "ab";
+        String s2 = "ab";
+        String s3 = "a";
+        String s4 = "b";
+        String s5 = s3 + s4;
+        String s6 = "a"+"b";
+        System.out.println(s1 == s2);
+        System.out.println(s1 == s6);
+        System.out.println(s5 == s6);
+        s5 = s5.intern();
+        System.out.println(s5 == s6);
+
+    }
 }
